@@ -14,7 +14,7 @@ extern "C" {
 #endif
 
 
-#define EJ2 0x20000001
+#define EJ2 0x200F0001
 #define EJ2VER1 1
 
 #if defined(__STDC__) || defined(__cplusplus)
