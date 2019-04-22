@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/wait.h>
-#include<string.h>
+#include <string.h>
 #include <sys/resource.h>
 
 int cantProcesos()
@@ -15,12 +15,12 @@ int cantProcesos()
     struct rlimit rl;
     getrlimit(RLIMIT_NPROC, &rl);
     //ulimit -u En consola
-    printf("%i\n", (int)rl.rlim_cur);
+    printf("\nCantidad de procesos que se pueden crear: %i\n", (int)rl.rlim_cur);
 }
 
 int main()
 {
-	double tiempo1,tiempo2,auxT1,tiempoFinal;
+	long tiempo1,tiempo2,auxT1,tiempoFinal;
 	struct timeval start, end;
 
 	char str_end[100], str_read[100]; //utilizada para pasar el tiempo como string en el pipe
@@ -33,18 +33,17 @@ int main()
 	if (fork() == 0){
         //child
         gettimeofday(&end, NULL);
-        tiempo1 =(double) (end.tv_usec - start.tv_usec);
+        tiempo1 =(long) ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec));
         close(pipedes[0]);
-
-        snprintf(str_end, 100, "%lf", tiempo1);
+        snprintf(str_end, 100, "%li", tiempo1);
         write(pipedes[1], str_end, strlen(str_end));
 
 	}
 	else {
         //father
         gettimeofday(&end, NULL);
-        tiempo2 =(double) (end.tv_usec - start.tv_usec);
-
+        tiempo2 =(long) ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec));
+        
 
 
         wait(NULL);
@@ -53,7 +52,7 @@ int main()
         read(pipedes[0], str_read, 100);
 
 
-        sscanf(str_read, "%lf", &auxT1);
+        sscanf(str_read, "%li", &auxT1);
 
         if (auxT1<tiempo2){
             tiempoFinal=auxT1;
@@ -61,7 +60,8 @@ int main()
         else {
             tiempoFinal=tiempo2;
         }
-        printf("\nTiempo que se tardo en crear un proceso: %lf ms\n",tiempoFinal);
+        printf("\nTiempo que se tardo en crear un proceso: %li ms\n",tiempoFinal);
+        cantProcesos();
     }
     return 0;
 

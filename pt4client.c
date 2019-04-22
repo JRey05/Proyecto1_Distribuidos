@@ -4,7 +4,10 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-as
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <strings.h>
+
 #define PORT 14550 /* El puerto donde se conectara */
 #define MAXDATASIZE 100
 

@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <strings.h>
+
     #define MYPORT 14550 /*Nro de puerto donde se conectaran los clientes*/
     #define BACKLOG 2 /* Tamaño de la cola de conexiones recibidas */
 
@@ -30,7 +31,7 @@ int main() {
     	printf("Error en el bind\n");
     }
 
-    printf("Hello world!\n");
+    printf("Jon\n");
 
     /* Habilita el socket para recibir conexiones, con una cola de x conexiones en espera como máximo */
     if (listen(sockfd, BACKLOG) == -1)
