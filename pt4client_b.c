@@ -11,7 +11,7 @@
 #include <strings.h>
 
 #define PORT 14550 /* El puerto donde se conectara */
-#define MAXDATASIZE 4
+#define MAXDATASIZE 2048
 
 int main(int argc, char *argv[])
 {

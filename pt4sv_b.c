@@ -41,7 +41,10 @@ int main() {
     {
     sin_size = sizeof(struct sockaddr_in);
 
-
+    char message[2048];
+    int i;
+    for(i=0;i<2048;i++)
+        message[i]='d';
     /*Se espera por conexiones ,*/
     if ((newfd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size)) == -1)
         printf("Ocurrio error en accept\n");
@@ -50,7 +53,7 @@ int main() {
     printf("Desde puerto: %d \n", ntohs(their_addr.sin_port));
     if (!fork())
         { /* Comienza el proceso hijo, enviamos los datos mediante newfd */
-        if (send(newfd, "Jon\n", 4, 0) == -1)
+        if (send(newfd, message, 2048, 0) == -1)
         	printf("Error en el send\n");
         close(newfd);
         exit(0);
