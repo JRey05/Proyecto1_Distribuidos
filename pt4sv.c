@@ -4,11 +4,13 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <strings.h>
     #define MYPORT 14550 /*Nro de puerto donde se conectaran los clientes*/
     #define BACKLOG 2 /* Tamaño de la cola de conexiones recibidas */
 
-    main() {
+int main() {
     int sockfd; /* El servidor escuchara por sockfd */
     int newfd; /* las transferencias de datos se realizan mediante newfd */
     struct sockaddr_in my_addr; /* contendrá la dir IP y el nro de puerto local */
