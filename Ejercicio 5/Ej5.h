@@ -15,16 +15,16 @@ extern "C" {
 
 
 struct st_hora {
-	int8_t segundo;
-	int8_t minuto;
-	int8_t hora;
+	int segundo;
+	int minuto;
+	int hora;
 };
 typedef struct st_hora st_hora;
 
 struct st_dia {
-	int8_t dia;
-	int8_t mes;
-	int16_t anho;
+	int dia;
+	int mes;
+	int anho;
 };
 typedef struct st_dia st_dia;
 
@@ -40,16 +40,16 @@ typedef struct parametros parametros;
 #define VERSION1 1
 
 #if defined(__STDC__) || defined(__cplusplus)
-#define decToBin 1
-extern  int * dectobin_1(int *, CLIENT *);
-extern  int * dectobin_1_svc(int *, struct svc_req *);
-#define binToHex 2
-extern  int * bintohex_1(int *, CLIENT *);
-extern  int * bintohex_1_svc(int *, struct svc_req *);
-#define pesoADolar 3
+#define dectobin 1
+extern  char ** dectobin_1(char **, CLIENT *);
+extern  char ** dectobin_1_svc(char **, struct svc_req *);
+#define bintohex 2
+extern  char ** bintohex_1(char **, CLIENT *);
+extern  char ** bintohex_1_svc(char **, struct svc_req *);
+#define pesoadolar 3
 extern  float * pesoadolar_1(float *, CLIENT *);
 extern  float * pesoadolar_1_svc(float *, struct svc_req *);
-#define pesoAEuro 4
+#define pesoaeuro 4
 extern  float * pesoaeuro_1(float *, CLIENT *);
 extern  float * pesoaeuro_1_svc(float *, struct svc_req *);
 #define f_hora 5
@@ -61,22 +61,28 @@ extern  st_dia * f_dia_1_svc(void *, struct svc_req *);
 #define suma 7
 extern  float * suma_1(arregloFloats *, CLIENT *);
 extern  float * suma_1_svc(arregloFloats *, struct svc_req *);
-#define multiplicacion 10
+#define resta 8
+extern  float * resta_1(arregloFloats *, CLIENT *);
+extern  float * resta_1_svc(arregloFloats *, struct svc_req *);
+#define multiplicacion 9
 extern  float * multiplicacion_1(arregloFloats *, CLIENT *);
 extern  float * multiplicacion_1_svc(arregloFloats *, struct svc_req *);
+#define division 10
+extern  float * division_1(arregloFloats *, CLIENT *);
+extern  float * division_1_svc(arregloFloats *, struct svc_req *);
 extern int miniops_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
-#define decToBin 1
-extern  int * dectobin_1();
-extern  int * dectobin_1_svc();
-#define binToHex 2
-extern  int * bintohex_1();
-extern  int * bintohex_1_svc();
-#define pesoADolar 3
+#define dectobin 1
+extern  char ** dectobin_1();
+extern  char ** dectobin_1_svc();
+#define bintohex 2
+extern  char ** bintohex_1();
+extern  char ** bintohex_1_svc();
+#define pesoadolar 3
 extern  float * pesoadolar_1();
 extern  float * pesoadolar_1_svc();
-#define pesoAEuro 4
+#define pesoaeuro 4
 extern  float * pesoaeuro_1();
 extern  float * pesoaeuro_1_svc();
 #define f_hora 5
@@ -88,9 +94,15 @@ extern  st_dia * f_dia_1_svc();
 #define suma 7
 extern  float * suma_1();
 extern  float * suma_1_svc();
-#define multiplicacion 10
+#define resta 8
+extern  float * resta_1();
+extern  float * resta_1_svc();
+#define multiplicacion 9
 extern  float * multiplicacion_1();
 extern  float * multiplicacion_1_svc();
+#define division 10
+extern  float * division_1();
+extern  float * division_1_svc();
 extern int miniops_1_freeresult ();
 #endif /* K&R C */
 

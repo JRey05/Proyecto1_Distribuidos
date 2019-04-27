@@ -9,30 +9,30 @@
 /* Default timeout can be changed using clnt_control() */
 static struct timeval TIMEOUT = { 25, 0 };
 
-int *
-dectobin_1(int *argp, CLIENT *clnt)
+char **
+dectobin_1(char **argp, CLIENT *clnt)
 {
-	static int clnt_res;
+	static char *clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	if (clnt_call (clnt, decToBin,
-		(xdrproc_t) xdr_int, (caddr_t) argp,
-		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
+	if (clnt_call (clnt, dectobin,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) argp,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
 	return (&clnt_res);
 }
 
-int *
-bintohex_1(int *argp, CLIENT *clnt)
+char **
+bintohex_1(char **argp, CLIENT *clnt)
 {
-	static int clnt_res;
+	static char *clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	if (clnt_call (clnt, binToHex,
-		(xdrproc_t) xdr_int, (caddr_t) argp,
-		(xdrproc_t) xdr_int, (caddr_t) &clnt_res,
+	if (clnt_call (clnt, bintohex,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) argp,
+		(xdrproc_t) xdr_wrapstring, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
 		return (NULL);
 	}
@@ -45,7 +45,7 @@ pesoadolar_1(float *argp, CLIENT *clnt)
 	static float clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	if (clnt_call (clnt, pesoADolar,
+	if (clnt_call (clnt, pesoadolar,
 		(xdrproc_t) xdr_float, (caddr_t) argp,
 		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
@@ -60,7 +60,7 @@ pesoaeuro_1(float *argp, CLIENT *clnt)
 	static float clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
-	if (clnt_call (clnt, pesoAEuro,
+	if (clnt_call (clnt, pesoaeuro,
 		(xdrproc_t) xdr_float, (caddr_t) argp,
 		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {
@@ -115,12 +115,42 @@ suma_1(arregloFloats *argp, CLIENT *clnt)
 }
 
 float *
+resta_1(arregloFloats *argp, CLIENT *clnt)
+{
+	static float clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, resta,
+		(xdrproc_t) xdr_arregloFloats, (caddr_t) argp,
+		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+float *
 multiplicacion_1(arregloFloats *argp, CLIENT *clnt)
 {
 	static float clnt_res;
 
 	memset((char *)&clnt_res, 0, sizeof(clnt_res));
 	if (clnt_call (clnt, multiplicacion,
+		(xdrproc_t) xdr_arregloFloats, (caddr_t) argp,
+		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
+		TIMEOUT) != RPC_SUCCESS) {
+		return (NULL);
+	}
+	return (&clnt_res);
+}
+
+float *
+division_1(arregloFloats *argp, CLIENT *clnt)
+{
+	static float clnt_res;
+
+	memset((char *)&clnt_res, 0, sizeof(clnt_res));
+	if (clnt_call (clnt, division,
 		(xdrproc_t) xdr_arregloFloats, (caddr_t) argp,
 		(xdrproc_t) xdr_float, (caddr_t) &clnt_res,
 		TIMEOUT) != RPC_SUCCESS) {

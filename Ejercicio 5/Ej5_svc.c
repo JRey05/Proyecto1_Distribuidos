@@ -20,12 +20,14 @@ static void
 miniops_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		int dectobin_1_arg;
-		int bintohex_1_arg;
+		char *dectobin_1_arg;
+		char *bintohex_1_arg;
 		float pesoadolar_1_arg;
 		float pesoaeuro_1_arg;
 		arregloFloats suma_1_arg;
+		arregloFloats resta_1_arg;
 		arregloFloats multiplicacion_1_arg;
+		arregloFloats division_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -36,25 +38,25 @@ miniops_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case decToBin:
-		_xdr_argument = (xdrproc_t) xdr_int;
-		_xdr_result = (xdrproc_t) xdr_int;
+	case dectobin:
+		_xdr_argument = (xdrproc_t) xdr_wrapstring;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
 		local = (char *(*)(char *, struct svc_req *)) dectobin_1_svc;
 		break;
 
-	case binToHex:
-		_xdr_argument = (xdrproc_t) xdr_int;
-		_xdr_result = (xdrproc_t) xdr_int;
+	case bintohex:
+		_xdr_argument = (xdrproc_t) xdr_wrapstring;
+		_xdr_result = (xdrproc_t) xdr_wrapstring;
 		local = (char *(*)(char *, struct svc_req *)) bintohex_1_svc;
 		break;
 
-	case pesoADolar:
+	case pesoadolar:
 		_xdr_argument = (xdrproc_t) xdr_float;
 		_xdr_result = (xdrproc_t) xdr_float;
 		local = (char *(*)(char *, struct svc_req *)) pesoadolar_1_svc;
 		break;
 
-	case pesoAEuro:
+	case pesoaeuro:
 		_xdr_argument = (xdrproc_t) xdr_float;
 		_xdr_result = (xdrproc_t) xdr_float;
 		local = (char *(*)(char *, struct svc_req *)) pesoaeuro_1_svc;
@@ -78,10 +80,22 @@ miniops_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		local = (char *(*)(char *, struct svc_req *)) suma_1_svc;
 		break;
 
+	case resta:
+		_xdr_argument = (xdrproc_t) xdr_arregloFloats;
+		_xdr_result = (xdrproc_t) xdr_float;
+		local = (char *(*)(char *, struct svc_req *)) resta_1_svc;
+		break;
+
 	case multiplicacion:
 		_xdr_argument = (xdrproc_t) xdr_arregloFloats;
 		_xdr_result = (xdrproc_t) xdr_float;
 		local = (char *(*)(char *, struct svc_req *)) multiplicacion_1_svc;
+		break;
+
+	case division:
+		_xdr_argument = (xdrproc_t) xdr_arregloFloats;
+		_xdr_result = (xdrproc_t) xdr_float;
+		local = (char *(*)(char *, struct svc_req *)) division_1_svc;
 		break;
 
 	default:

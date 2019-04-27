@@ -10,11 +10,11 @@ xdr_st_hora (XDR *xdrs, st_hora *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_int8_t (xdrs, &objp->segundo))
+	 if (!xdr_int (xdrs, &objp->segundo))
 		 return FALSE;
-	 if (!xdr_int8_t (xdrs, &objp->minuto))
+	 if (!xdr_int (xdrs, &objp->minuto))
 		 return FALSE;
-	 if (!xdr_int8_t (xdrs, &objp->hora))
+	 if (!xdr_int (xdrs, &objp->hora))
 		 return FALSE;
 	return TRUE;
 }
@@ -24,11 +24,11 @@ xdr_st_dia (XDR *xdrs, st_dia *objp)
 {
 	register int32_t *buf;
 
-	 if (!xdr_int8_t (xdrs, &objp->dia))
+	 if (!xdr_int (xdrs, &objp->dia))
 		 return FALSE;
-	 if (!xdr_int8_t (xdrs, &objp->mes))
+	 if (!xdr_int (xdrs, &objp->mes))
 		 return FALSE;
-	 if (!xdr_int16_t (xdrs, &objp->anho))
+	 if (!xdr_int (xdrs, &objp->anho))
 		 return FALSE;
 	return TRUE;
 }
