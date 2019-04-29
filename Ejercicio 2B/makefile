@@ -1,0 +1,17 @@
+.PHONY : all
+all: EXEC ejercicio2b cliente servidor
+ejercicio2b : cliente servidor
+cliente : cliente.o ejercicio2b_clnt.o ejercicio2b.h
+	gcc -lnsl -o cliente cliente.o ejercicio2b_clnt.o
+cliente.o: cliente.c
+	gcc -c cliente.c
+ejercicio2b_clnt.o : ejercicio2b_clnt.c
+	gcc -c ejercicio2b_clnt.c
+servidor : servidor.o ejercicio2b_svc.o ejercicio2b.h
+	gcc -lnsl -o servidor servidor.o ejercicio2b_svc.o
+servidor.o : servidor.c
+	gcc -c servidor.c
+ejercicio2b_svc.o : ejercicio2b_svc.c
+	gcc -c ejercicio2b_svc.c
+ejercicio2b_svc.c ejercicio2b_clnt.c ejercicio2b.h : ejercicio2b.x
+	rpcgen ejercicio2b.x
