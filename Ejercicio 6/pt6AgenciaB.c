@@ -12,7 +12,7 @@
 #include <string.h>
 
 #define PORTCLI 14500 /* El puerto por donde se conectan clientes */
-#define PORT_4LISTEN_AGA 14650 // puerto por donde escucha por transf de servicios desde la agencia B
+#define PORTCLIA 14550
 #define PORT_4TRANSF_AGA 14600 // puerto por donde se le transfiere una consulta a la agencia B
 #define BACKLOG 10
 
@@ -112,13 +112,14 @@ void atender7(int cantDominiosVeh,struct dominioVehiculo *dominiosVeh, int newfd
 		//nro contiene la transformacion de dni unsigned long -> string
 		sprintf(nro, "%u", dominiosVeh[i].nroMotorChasis);
 		strcat(dm[i],nro);
+		strcat(dm[i],"\n");
 			
 	}
 	char mensajeDomVeh[sizeof(dm)]; 
 	for (j=0;j<cantDominiosVeh;j++)
 			strcat(dm[i],"\n");
 
-	for (i=0;i<50;i++)
+	for (i=0;i<cantDominiosVeh;i++)
 		strcat(mensajeDomVeh,dm[i]);
 
 	printf("Enviando la respuesta al cliente...\n");
@@ -217,16 +218,12 @@ int main(int argc, char *argv[])
 	int i,j;
 	int sock_clientes; // el sv escucha solicitudes de clientes por sock_clientes
 	int sock_transf_aga; // y escucha las resoluciones de la agencia B por sock_transf_aga
-	int sock_listen_aga; // por aca recibe la resolucion de la agencia B
 	int newfd; /* las transferencias de datos se realizan mediante newfd */
-	int newfd2; // para comunicarse con el servidor
     int sin_size; /* Contendra el tamaño de la escructura sockaddr_in */
 	struct hostent *heAgenciaA; /* Se utiliza para convertir el nombre del host a su dirección IP */
 	struct sockaddr_in my_addr; //dir ip y nro de puerto local
 	struct sockaddr_in their_addr; /* dirección del cliente que solicito algo */
 	struct sockaddr_in aga_transf;	// direccion de la agencia B
-	struct sockaddr_in aga_listen;	// direccion de la agencia B (dif puerto)
-
 
     // Asigna valores a la estruct my_addr para luego poder llamar a la función bind()
     my_addr.sin_family= AF_INET;
@@ -240,184 +237,110 @@ int main(int argc, char *argv[])
 	    { printf("Error en gethostbyname\n"); }
 
     // Asigna valores a la estruct their_addr para luego poder llamar a la función bind()
+    /*
     aga_transf.sin_family= AF_INET;
-    aga_transf.sin_port= htons(PORT_4TRANSF_AGA); /*formato de network byte order */
+    aga_transf.sin_port= htons(PORT_4TRANSF_AGA); //formato de network byte order
     aga_transf.sin_addr= *((struct in_addr *)heAgenciaA->h_addr);
-    bzero(&(aga_transf.sin_zero), 8); /* rellena con ceros el resto de la estructura */
-
+    bzero(&(aga_transf.sin_zero), 8); // rellena con ceros el resto de la estructura
+	*/
     // Asigna valores a la estruct their_addr para luego poder llamar a la función bind()
-    aga_listen.sin_family= AF_INET;
-    aga_listen.sin_port= htons(PORT_4LISTEN_AGA); /*formato de network byte order */
-    aga_listen.sin_addr= *((struct in_addr *)heAgenciaA->h_addr);
-    bzero(&(aga_listen.sin_zero), 8); /* rellena con ceros el resto de la estructura */
-
 	
 	/* Creamos el socket */
 	if ((sock_clientes = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     	{ printf("Error al crear el socket\n"); }
-    if ((sock_transf_aga = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-    	{ printf("Error al crear el socket 2\n"); }
-    if ((sock_listen_aga = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-    	{ printf("Error al crear el socket 2\n"); }
 
     /* Asigna un nombre al socket */
     if (bind(sock_clientes, (struct sockaddr *)&my_addr, sizeof(struct sockaddr)) == -1) {
     	printf("Error en el bind\n");
     }
 
-    if (bind(sock_listen_aga, (struct sockaddr *)&aga_listen, sizeof(struct sockaddr)) == -1) {
-    	printf("Error en el 2do bind\n");
-    }
-
     /* Habilita el socket para recibir conexiones, con una cola de x conexiones en espera como máximo */
     if (listen(sock_clientes, BACKLOG) == -1)
         printf("Ocurrio error en listen\n");
-    if (listen(sock_listen_aga, BACKLOG) == -1)
-        printf("Ocurrio error en listen\n");
 
     sin_size = sizeof(struct sockaddr_in);
-    pid=fork();
-    if (pid){
-    	while(1){
 
-	    	printf("\n-------------La Agencia B esta escuchando consultas de la Agencia A-------------\n\n");
-	    	// en este proceso hijo escucha y atiende las consultas de la otra agencia
-	    	
-	    	/*Se espera por conexiones desde la agencia A*/
-	    	if ((newfd = accept(sock_listen_aga, (struct sockaddr *)&their_addr, &sin_size)) == -1)
+	while(1){
+
+    	//el proceso padre queda esperando por clientes y el hijo anterior por la agencia A
+	    printf("\n---------------La Agencia B esta escuchando---------------\n\n");
+	    /*Se espera por conexiones de clientes*/
+	    if ((newfd = accept(sock_clientes, (struct sockaddr *)&their_addr, &sin_size)) == -1)
 	        printf("Ocurrio error en accept\n");
-	    	printf("Server: conexion desde la agencia b: %s\n", inet_ntoa(their_addr.sin_addr));
-	    	printf("Desde puerto: %d \n", ntohs(their_addr.sin_port));
-	    	if (!fork()){
-	    		//hijo que atiende solicitudes
-	    		if ((numbytes=recv(newfd, solicitud, sizeof(solicitud), 0)) == -1)
-				{ printf("Error en receive\n"); }
-				/* Visualizamos lo recibido */
-				solicitud[sizeof(solicitud)] = '\0';
-				printf("Solicitud recibida: %s\n",solicitud);
 
-		    	//	CASOS QUE RESUELVE LA AGENCIA B
+	    printf("Server: conexion desde: %s\n", inet_ntoa(their_addr.sin_addr));
+	    printf("Desde puerto: %d \n", ntohs(their_addr.sin_port));
+	    if (!fork()){
 
-				int solicitudNro=checkSolicitudValida(solicitud);
-				//printf ("\n\nSolicitud Nro Computado: %i\n\n",solicitudNro);
-				switch(solicitudNro){
+	    /* Comienza el proceso hijo que se encarga de atender las solicitudes, enviamos los datos mediante newfd */
 
-					case 5:{
+	    	//	QUEDO A LA ESCUCHA DE UN MENSAJE, DEPENDIENDO EL MENSAJE, RESUELVO Y ENVIO, O DELEGO A LA AGENCIA B Y ENVIO LO QUE RECIBO DE ESTA
+	    	if ((numbytes=recv(newfd, solicitud, sizeof(solicitud), 0)) == -1)
+	    		{ printf("Error en receive\n"); }
+			/* Visualizamos lo recibido */
+			solicitud[sizeof(solicitud)] = '\0';
+			printf("Solicitud recibida: %s\n",solicitud);
 
-				    	//	TURNOS PARA PATENTAR EL AUTO
-				    	atender5(cantTurnosPatentarAuto,turnosPatentarAuto,newfd);
-				        break;
+	    	//	CASOS QUE RESUELVE LA AGENCIA A
 
-					}		        	
+			int solicitudNro=checkSolicitudValida(solicitud);
+			//printf ("\n\nSolicitud Nro Computado: %i\n\n",solicitudNro);
+			switch(solicitudNro){
 
-					case 6:{
+				case 5:{
 
+					    	//	TURNOS PARA PATENTAR EL AUTO
+					    	atender5(cantTurnosPatentarAuto,turnosPatentarAuto,newfd);
+					        break;
 
-				        //	TURNOS PARA LA TRANSFERENCIA DEL VEHICULO
-						atender6(cantTurnosTransferenciaVehiculo,turnosTransferenciaVehiculo,newfd);
-				        break;
+						}		        	
 
-					}
-					case 7:{
-						//	INFO DEL DOMINIO DEL VEHICULO
-
-						atender7(cantDominiosVeh,dominiosVeh,newfd);
-				        break;
-					}
-	    		}
-	    		
-	    		exit(0);
-
-    		}
-    	}
-    }
-
-    else{
-
-    	while(1){
-
-	    	//el proceso padre queda esperando por clientes y el hijo anterior por la agencia A
-		    printf("\n---------------La Agencia B esta escuchando consultas de clientes---------------\n\n");
-		    /*Se espera por conexiones de clientes*/
-		    if ((newfd = accept(sock_clientes, (struct sockaddr *)&their_addr, &sin_size)) == -1)
-		        printf("Ocurrio error en accept\n");
-
-		    printf("Server: conexion desde: %s\n", inet_ntoa(their_addr.sin_addr));
-		    printf("Desde puerto: %d \n", ntohs(their_addr.sin_port));
-		    if (!fork()){
-
-		    /* Comienza el proceso hijo que se encarga de atender las solicitudes, enviamos los datos mediante newfd */
-
-		    	//	QUEDO A LA ESCUCHA DE UN MENSAJE, DEPENDIENDO EL MENSAJE, RESUELVO Y ENVIO, O DELEGO A LA AGENCIA B Y ENVIO LO QUE RECIBO DE ESTA
-		    	if ((numbytes=recv(newfd, solicitud, sizeof(solicitud), 0)) == -1)
-		    		{ printf("Error en receive\n"); }
-				/* Visualizamos lo recibido */
-				solicitud[sizeof(solicitud)] = '\0';
-				printf("Solicitud recibida: %s\n",solicitud);
-
-		    	//	CASOS QUE RESUELVE LA AGENCIA A
-
-				int solicitudNro=checkSolicitudValida(solicitud);
-				//printf ("\n\nSolicitud Nro Computado: %i\n\n",solicitudNro);
-				switch(solicitudNro){
-
-					case 5:{
-
-						    	//	TURNOS PARA PATENTAR EL AUTO
-						    	atender5(cantTurnosPatentarAuto,turnosPatentarAuto,newfd);
-						        break;
-
-							}		        	
-
-							case 6:{
+						case 6:{
 
 
-						        //	TURNOS PARA LA TRANSFERENCIA DEL VEHICULO
-								atender6(cantTurnosTransferenciaVehiculo,turnosTransferenciaVehiculo,newfd);
-						        break;
+					        //	TURNOS PARA LA TRANSFERENCIA DEL VEHICULO
+							atender6(cantTurnosTransferenciaVehiculo,turnosTransferenciaVehiculo,newfd);
+					        break;
 
-							}
-							case 7:{
-								//	INFO DEL DOMINIO DEL VEHICULO
+						}
+						case 7:{
+							//	INFO DEL DOMINIO DEL VEHICULO
 
-								atender7(cantDominiosVeh,dominiosVeh,newfd);
-						        break;
-							}
+							atender7(cantDominiosVeh,dominiosVeh,newfd);
+					        break;
+						}
 
-		        //	CASOS A DELEGAR A LA AGENCIA A
+	        //	CASOS A DELEGAR A LA AGENCIA A
 
-					/*	En cada caso es necesario transferir el mensaje y esperar por la respuesta de la Agencia A */
-					default:{
+				/*	En cada caso es necesario transferir el mensaje y esperar por la respuesta de la Agencia A */
+				default:{
 
-						aga_transf.sin_family= AF_INET;
-					    aga_transf.sin_port= htons(PORT_4TRANSF_AGA); /*formato de network byte order */
-					    aga_transf.sin_addr= *((struct in_addr *)heAgenciaA->h_addr);
-					    bzero(&(aga_transf.sin_zero), 8); /* rellena con ceros el resto de la estructura */
+					aga_transf.sin_family= AF_INET;
+				    aga_transf.sin_port= htons(PORTCLIA); /*formato de network byte order */
+				    aga_transf.sin_addr= *((struct in_addr *)heAgenciaA->h_addr);
+				    bzero(&(aga_transf.sin_zero), 8); /* rellena con ceros el resto de la estructura */
 
 
-					    if ((sock_transf_aga = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-					    	{ printf("Error al crear el socket 2\n"); }
+				    if ((sock_transf_aga = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+				    	{ printf("Error al crear el socket 2\n"); }
 
-						if (connect(sock_transf_aga, (struct sockaddr *)&aga_transf, sizeof(struct sockaddr)) == -1)
-							{ printf("Error en connect\n"); }
-				        if (send(sock_transf_aga, solicitud, sizeof(solicitud), 0) == -1)
-				        	printf("Error en el send\n");
-		        		if ((numbytes=recv(sock_transf_aga, infoTransferida, sizeof(infoTransferida), 0)) == -1)
-		    				{ printf("Error en receive\n"); }
-		    			printf("Rta desde la Agencia A: %s\n",infoTransferida);
-		    			printf("Redirigiendo la respuesta al cliente...\n");
-		    			// hay que enviarla al cliente
-		    			if (send(newfd, infoTransferida, sizeof(infoTransferida), 0) == -1)
-				        	printf("Error en el send\n");
-		    			break;
-					}
-		    	}	
-		    exit(0);
-		    	
-			}
-		}	
-    }
+					if (connect(sock_transf_aga, (struct sockaddr *)&aga_transf, sizeof(struct sockaddr)) == -1)
+						{ printf("Error en connect\n"); }
+			        if (send(sock_transf_aga, solicitud, sizeof(solicitud), 0) == -1)
+			        	printf("Error en el send\n");
+	        		if ((numbytes=recv(sock_transf_aga, infoTransferida, sizeof(infoTransferida), 0)) == -1)
+	    				{ printf("Error en receive\n"); }
+	    			printf("Rta desde la Agencia A: %s\n",infoTransferida);
+	    			printf("Redirigiendo la respuesta al cliente...\n");
+	    			// hay que enviarla al cliente
+	    			if (send(newfd, infoTransferida, sizeof(infoTransferida), 0) == -1)
+			        	printf("Error en el send\n");
+	    			break;
+				}
+	    	}	
+	    	exit(0);
+	    }
+	}	
 
     close(newfd);
-
 }
