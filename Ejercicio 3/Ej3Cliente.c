@@ -32,7 +32,5 @@ int main(int argc,char *argv[]) {
     promedio=promedio+tiempo;
   }
   promedio=promedio/100;
-
-  printf("Resultado: %s\n",*resultado);
   printf("Tiempo que demoro: %.2f μs\n", promedio);
 }

@@ -10,3 +10,5 @@ servidor : servidor.c ejercicio2b_svc.c ejercicio2b.h
 	gcc -ltirpc -I/usr/include/tirpc -o servidor servidor.c ejercicio2b_svc.c
 ejercicio2b_svc.c ejercicio2b_clnt.c ejercicio2b.h : ejercicio2b.x
 	rpcgen ejercicio2b.x
+EXEC : EXEC.c
+	gcc -o EXEC EXEC.c

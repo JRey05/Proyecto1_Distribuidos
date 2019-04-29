@@ -4,8 +4,8 @@ all: Ej3Cliente Ej3Servidor
 clean :
 	rm Ej3Cliente Ej3Servidor SumaArreglos_svc.c SumaArreglos_xdr.c SumaArreglos_clnt.c
 Ej3Cliente: Ej3Cliente.c SumaArreglos_clnt.c SumaArreglos_xdr.c SumaArreglos.h
-	gcc -ltirpc -I/usr/include/tirpc -o Ej3Cliente Ej3Cliente.c SumaArreglos_clnt.c SumaArreglos_xdr.c
+	gcc -lnsl -o Ej3Cliente Ej3Cliente.c SumaArreglos_clnt.c SumaArreglos_xdr.c
 Ej3Servidor: Ej3Servidor.c SumaArreglos_svc.c SumaArreglos_xdr.c SumaArreglos.h
-	gcc -ltirpc -I/usr/include/tirpc -o Ej3Servidor Ej3Servidor.c SumaArreglos_svc.c SumaArreglos_xdr.c
+	gcc -lnsl -o Ej3Servidor Ej3Servidor.c SumaArreglos_svc.c SumaArreglos_xdr.c
 SumaArreglos_svc.c SumaArreglos_xdr.c SumaArreglos_clnt.c: SumaArreglos.x
 	rpcgen SumaArreglos.x
