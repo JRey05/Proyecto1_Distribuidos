@@ -8,7 +8,7 @@ int main(int argc,char *argv[]) {
   nametype *resultado;
   nametype entrada;
   if (argc != 2) {
-    printf ("Error cantidad de parametros.\n");
+    printf ("\nUso: ./Ej3Cliente ipServidor\n");
     exit(1);
   }
   server = argv[1];
@@ -18,6 +18,21 @@ int main(int argc,char *argv[]) {
     exit(1);
   }
   entrada = "ASDFASDF";
-  resultado = cadena_1(&entrada,clnt);
-  printf("%s",*resultado);
+  double tiempo;
+  double promedio=0;
+  struct timeval inicio,final;
+  int i;
+  for (i=0;i<100;i++){
+    //inicio el temporizador
+    gettimeofday(&inicio,NULL);
+    resultado = cadena_1(&entrada,clnt);
+    //finalizo el temporizador
+    gettimeofday(&final,NULL);
+    tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+    promedio=promedio+tiempo;
+  }
+  promedio=promedio/100;
+  
+  printf("Resultado: %s",*resultado);
+  printf("Tiempo que demoro: %.2f μs", promedio);
 }
