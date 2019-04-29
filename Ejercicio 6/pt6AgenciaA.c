@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
 					break;
 				}
 			}
-			exit(0);
+		exit(0);
 	    }
 	close(newfd);
 	}

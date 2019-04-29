@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
     //pido a que agencia se desea conectar para settear el puerto de comunicacion..
     //para el caso donde ambas agencias estan corriendo en la misma pc
 	int MYPORT, nroagencia, opcion, otra;
-	printf("\nBuen dia! Con que agencia se desea conectar?\n\n"); //para configurar el nro de puerto
+	printf("\nBuen dia! ¿A que agencia corresponde el ip que ingreso como parametro?\n\n"); //para configurar el nro de puerto
 	printf("1. Agencia A\n");
 	printf("2. Agencia B\n\n");
-	printf("Deseo la agencia nro: ");
+	printf("Es la agencia nro: ");
 	scanf("%i",&nroagencia);
 
 	switch (nroagencia){
@@ -76,27 +76,23 @@ int main(int argc, char *argv[])
 	/* Creamos el socket */
 	if ((newfd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
     	{ printf("Error al crear el socket\n"); }
-	
-    int optValida=1;
-    while (optValida){
-    	
-		printf("\nIngrese el nro de la opcion que desea:\n\n");
-		printf("1. Consultar sobre turnos de la licencia de matrimonio\n");
-		printf("2. Consultar sobre informacion de la partida de nacimiento\n");
-		printf("3. Consultar sobre turno para inscripcion del recien nacido\n");
-		printf("4. Consultar el numero de atenciones realizadas\n");
-		printf("5. Consultar sobre turnos para patentar el auto\n");
-		printf("6. Consultar sobre turnos para realizar la transferencia de un vehiculo\n");
-		printf("7. Consultar informacion sobre el dominio de un vehiculo\n\n");
-		printf("Ingresando la opcion nro: ");
-		scanf("%i",&opcion);
 
-		if (!((opcion==1)||(opcion==2)||(opcion==3)||(opcion==4)||(opcion==5)||(opcion==6)||(opcion==7))){
-			printf("\nIntente nuevamente con un nro valido\n");
-			printf("Adios! \n");
-			exit(0);
-		}
-    }
+	printf("\nIngrese el nro de la opcion que desea:\n\n");
+	printf("1. Consultar sobre turnos de la licencia de matrimonio\n");
+	printf("2. Consultar sobre informacion de la partida de nacimiento\n");
+	printf("3. Consultar sobre turno para inscripcion del recien nacido\n");
+	printf("4. Consultar el numero de atenciones realizadas\n");
+	printf("5. Consultar sobre turnos para patentar el auto\n");
+	printf("6. Consultar sobre turnos para realizar la transferencia de un vehiculo\n");
+	printf("7. Consultar informacion sobre el dominio de un vehiculo\n\n");
+	printf("Ingresando la opcion nro: ");
+	scanf("%i",&opcion);
+
+	if (!((opcion==1)||(opcion==2)||(opcion==3)||(opcion==4)||(opcion==5)||(opcion==6)||(opcion==7))){
+		printf("\nIntente nuevamente con un nro valido\n");
+		printf("Adios! \n");
+		exit(0);
+	}
 
 	switch(opcion){
 

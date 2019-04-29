@@ -59,7 +59,7 @@ void atender5(int cantTurnosPatentarAuto,struct tm *turnosPatentarAuto,int newfd
 	for (j=0;j<cantTurnosPatentarAuto;j++)
 			strcat(turnosPatAuto[i],"\n");
 
-	for (i=0;i<50;i++)
+	for (i=0;i<cantTurnosPatentarAuto;i++)
 		strcat(mensajePatAuto,turnosPatAuto[i]);
 
 	printf("Enviando la respuesta al cliente...\n");
@@ -84,7 +84,7 @@ void atender6(int cantTurnosTransferenciaVehiculo,struct tm *turnosTransferencia
 	for (j=0;j<cantTurnosTransferenciaVehiculo;j++)
 			strcat(turnosTransfVeh[i],"\n");
 
-	for (i=0;i<50;i++)
+	for (i=0;i<cantTurnosTransferenciaVehiculo;i++)
 		strcat(mensajeTransfAuto,turnosTransfVeh[i]);
 
 	printf("Enviando la respuesta al cliente...\n");
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
 	    			break;
 				}
 	    	}	
-	    	exit(0);
+	    exit(0);
 	    }
 	}	
 

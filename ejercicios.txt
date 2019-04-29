@@ -1,1 +1,0 @@
-1. Se pueden crear tantos procesos como lo indique el valor retornado por la función getrlimit() o "ulimit -u" en consola.

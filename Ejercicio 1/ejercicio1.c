@@ -18,39 +18,35 @@ int cantProcesos()
     printf("\nCantidad de procesos que se pueden crear: %i\n", (int)rl.rlim_cur);
 }
 
-int main()
-{
-	long tiempo1,tiempo2,auxT1,tiempoFinal;
-	struct timeval start, end;
+long calcularTiempo(){
 
-	char str_end[100], str_read[100]; //utilizada para pasar el tiempo como string en el pipe
+    char str_end[100], str_read[100]; //utilizada para pasar el tiempo como string en el pipe
 
     int pipedes[2];
     pipe(pipedes);
 
-	gettimeofday(&start, NULL);
+    struct timeval start,end;
+    long tiempoFinal,tiempo1,tiempo2,auxT1;
 
-	if (fork() == 0){
+    gettimeofday(&start, NULL);
+    if (fork() == 0){
         //child
         gettimeofday(&end, NULL);
         tiempo1 =(long) ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec));
         close(pipedes[0]);
         snprintf(str_end, 100, "%li", tiempo1);
         write(pipedes[1], str_end, strlen(str_end));
+        exit(0);
 
-	}
-	else {
+    }
+    else {
         //father
         gettimeofday(&end, NULL);
         tiempo2 =(long) ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec));
-        
-
-
         wait(NULL);
 
         close(pipedes[1]);
         read(pipedes[0], str_read, 100);
-
 
         sscanf(str_read, "%li", &auxT1);
 
@@ -60,9 +56,22 @@ int main()
         else {
             tiempoFinal=tiempo2;
         }
-        printf("\nTiempo que se tardo en crear un proceso: %li ms\n",tiempoFinal);
-        cantProcesos();
     }
-    return 0;
 
+return tiempoFinal;
 }
+
+int main()
+{
+
+    long promedio=0;
+    int i;
+    for(i=0;i<100;i++){
+        promedio=promedio+calcularTiempo();
+    }
+    promedio=promedio/100;
+    printf("\nTiempo promedio que se tarda en crear un proceso: %li μs\n",promedio);
+    cantProcesos();
+    return 0;
+}
+
