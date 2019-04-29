@@ -10,7 +10,6 @@ float *f1_1_svc(void *vacio,struct svc_req *req) {
         execvp(args[0],args);
 	else {
 		wait(NULL);
-		printf("Me ejecute\n");
     result = 26;
     return (&result);
 	}

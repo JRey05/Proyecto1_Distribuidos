@@ -21,7 +21,10 @@ int main (int argc,char *argv[]) {
   int i;
   double tiempo;
   double promedio=0;
+  printf("Caculando...\n");
   for (i=0;i<100;i++){
+    if (i%25==0)
+      printf(".\n");
     gettimeofday(&inicio,NULL);
     float *resultado = f1_1(vacio,clnt);
     gettimeofday(&fin,NULL);
@@ -29,5 +32,5 @@ int main (int argc,char *argv[]) {
     promedio=promedio+tiempo;
   }
   promedio=promedio/100;
-  printf("Tardo %f μs\n", (float)promedio);
+  printf("\nTardo %.2f μs\n", (float)promedio);
 }
