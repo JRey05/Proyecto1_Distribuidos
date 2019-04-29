@@ -17,6 +17,10 @@ int main(int argc,char *argv[]) {
     exit(1);
   }
   int opcion;
+  double tiempo;
+  double promedio=0;
+  struct timeval inicio,final;
+  int i;
   char *entrada=(char*)malloc(32);
   printf("Ingrese el numero de la opción solicitada:\n\
   \t1: Numero decimal a binario.\n\
@@ -35,14 +39,35 @@ int main(int argc,char *argv[]) {
       printf("Ingrese el numero:\n");
       scanf("%s",entrada);
       char *salida=(char*)malloc(32);
-      salida = *dectobin_1(&entrada,clnt);
-      printf("\nSu numero en binario es:\n\t%s.\n", salida);
+
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        salida = *dectobin_1(&entrada,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("\nTiempo que demoro: %.2f μs\n", promedio);
+      printf("Su numero en binario es:\n\t%s.\n", salida);
     }break;
     case 2:{
       printf("Ingrese el numero:\n");
       scanf("%s",entrada);
       char *salida=(char*)malloc(32);
-      salida = *bintohex_1(&entrada,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        salida = *bintohex_1(&entrada,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("\nSu numero en hexadecimal es:\n\t%s.\n", salida);
     }break;
     case 3:{
@@ -50,7 +75,17 @@ int main(int argc,char *argv[]) {
       float pesos=0;
       scanf("%f",&pesos);
       float *salida;
-      salida = pesoadolar_1(&pesos,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        salida = pesoadolar_1(&pesos,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("\nRepresentan %.2f dolares.\n", *salida);
     }break;
     case 4:{
@@ -58,19 +93,49 @@ int main(int argc,char *argv[]) {
       float pesos=0;
       scanf("%f",&pesos);
       float *salida;
-      salida = pesoaeuro_1(&pesos,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        salida = pesoaeuro_1(&pesos,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("\nRepresentan %.2f euros.\n", *salida);
     }break;
     case 5:{
       st_hora *hora;
       void * vacio;
-      hora = f_hora_1(vacio,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        hora = f_hora_1(vacio,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("La hora es: %i:%i:%i\n",hora->hora,hora->minuto,hora->segundo);
     }break;
     case 6:{
       st_dia *dia;
       void * vacio;
-      dia = f_dia_1(vacio,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        dia = f_dia_1(vacio,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("El dia es: %i/%i/%i\n",dia->dia,dia->mes,dia->anho);
     }break;
     case 7:{
@@ -83,7 +148,17 @@ int main(int argc,char *argv[]) {
         scanf("%f", &(arreglo.arr[i]));
       }
       float *resultado;
-      resultado = suma_1(&arreglo,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        resultado = suma_1(&arreglo,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("Resultado: %.2f\n",*resultado);
     }break;
     case 8:{
@@ -96,7 +171,17 @@ int main(int argc,char *argv[]) {
         scanf("%f", &(arreglo.arr[i]));
       }
       float *resultado;
-      resultado = resta_1(&arreglo,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        resultado = resta_1(&arreglo,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("Resultado: %.2f\n",*resultado);
     }break;
     case 9:{
@@ -108,7 +193,17 @@ int main(int argc,char *argv[]) {
         scanf("%f", &(arreglo.arr[i]));
       }
       float *resultado;
-      resultado = multiplicacion_1(&arreglo,clnt);
+      for (i=0;i<100;i++){
+        //inicio el temporizador
+        gettimeofday(&inicio,NULL);
+        resultado = multiplicacion_1(&arreglo,clnt);
+        //finalizo el temporizador
+        gettimeofday(&final,NULL);
+        tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+        promedio=promedio+tiempo;
+      }
+      promedio=promedio/100;
+      printf("Tiempo que demoro: %.2f μs\n", promedio);
       printf("Resultado: %.2f\n",*resultado);
     }break;
     case 10:{
@@ -123,7 +218,17 @@ int main(int argc,char *argv[]) {
         printf("No se puede dividir por 0.\n");
       } else {
         float *resultado;
-        resultado = division_1(&arreglo,clnt);
+        for (i=0;i<100;i++){
+          //inicio el temporizador
+          gettimeofday(&inicio,NULL);
+          //finalizo el temporizador
+          resultado = division_1(&arreglo,clnt);
+          gettimeofday(&final,NULL);
+          tiempo=(double)((final.tv_sec*1000000+final.tv_usec)-(inicio.tv_sec*1000000+inicio.tv_usec));
+          promedio=promedio+tiempo;
+        }
+        promedio=promedio/100;
+        printf("Tiempo que demoro: %.2f μs\n", promedio);
         printf("Resultado: %.2f\n",*resultado);
       }
     }break;

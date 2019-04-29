@@ -73,6 +73,7 @@ st_dia * f_dia_1_svc(void *vacio,struct svc_req *cliente){
 float * suma_1_svc(arregloFloats * arr, struct svc_req *cliente){
   int cant = arr->cant;
   static float resultado=0;
+  resultado = 0;
   for(int i=0; i<cant;i++) {
     resultado+=arr->arr[i];
   }
@@ -81,6 +82,7 @@ float * suma_1_svc(arregloFloats * arr, struct svc_req *cliente){
 float * resta_1_svc(arregloFloats * arr, struct svc_req *cliente){
   int cant = arr->cant;
   static float resultado=0;
+  resultado = 0;
   resultado = arr->arr[0];
   for(int i=1; i<cant;i++) {
     resultado-=arr->arr[i];
@@ -90,12 +92,14 @@ float * resta_1_svc(arregloFloats * arr, struct svc_req *cliente){
 
 float * multiplicacion_1_svc(arregloFloats * arr, struct svc_req *cliente) {
   static float resultado;
+  resultado = 0;
   resultado=arr->arr[0] * arr->arr[1];
   return (&resultado);
 }
 
 float * division_1_svc(arregloFloats * arr, struct svc_req *cliente) {
   static float resultado;
+  resultado = 0;
   resultado=arr->arr[0] / arr->arr[1];
   return (&resultado);
 }
