@@ -1,5 +1,8 @@
 .PHONY : all
 all: EXEC ejercicio2b cliente servidor
+.PHONY : clean
+clean :
+	rm *.o
 ejercicio2b : cliente servidor
 cliente : cliente.c ejercicio2b_clnt.c ejercicio2b.h
 	gcc -lnsl -o cliente cliente.c ejercicio2b_clnt.c

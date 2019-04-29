@@ -1,6 +1,6 @@
 .PHONY :all
 all: Ej3Cliente Ej3Servidor
-
+.PHONY : clear
 Ej3Cliente: Ej3Cliente.o SumaArreglos_clnt.o SumaArreglos_xdr.o SumaArreglos.h
 	gcc -lnsl -o Ej3Cliente Ej3Cliente.o SumaArreglos_clnt.o SumaArreglos_xdr.o
 Ej3Cliente.o: Ej3Cliente.c
