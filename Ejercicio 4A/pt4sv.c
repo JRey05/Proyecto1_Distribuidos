@@ -31,7 +31,7 @@ int main() {
     	printf("Error en el bind\n");
     }
 
-    printf("Winter is coming\n");
+    printf("------------Servidor escuchando------------\n");
 
     /* Habilita el socket para recibir conexiones, con una cola de x conexiones en espera como máximo */
     if (listen(sockfd, BACKLOG) == -1)
@@ -50,7 +50,8 @@ int main() {
     printf("Desde puerto: %d \n", ntohs(their_addr.sin_port));
     if (!fork())
         { /* Comienza el proceso hijo, enviamos los datos mediante newfd */
-        if (send(newfd, "Jon\n", 4, 0) == -1)
+        //envio 4 bytes, en c cada char se codifica con un byte
+        if (send(newfd, "AAA\n", 4, 0) == -1)
         	printf("Error en el send\n");
         close(newfd);
         exit(0);

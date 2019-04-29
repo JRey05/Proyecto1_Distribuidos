@@ -31,7 +31,7 @@ int main() {
     	printf("Error en el bind\n");
     }
 
-    printf("Winter is coming\n");
+    printf("\n-----------------Servidor escuchando------------------\n");
 
     /* Habilita el socket para recibir conexiones, con una cola de x conexiones en espera como máximo */
     if (listen(sockfd, BACKLOG) == -1)
@@ -44,7 +44,7 @@ int main() {
     char message[2048];
     int i;
     for(i=0;i<2048;i++)
-        message[i]='d';
+        message[i]='A';
     /*Se espera por conexiones ,*/
     if ((newfd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size)) == -1)
         printf("Ocurrio error en accept\n");
