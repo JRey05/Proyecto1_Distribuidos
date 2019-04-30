@@ -46,8 +46,8 @@ int main(int argc,char *argv[]) {
       clock_gettime(clk_id, (&tCli));
       t2 = (long) ((tCli.tv_sec * 1000000000 + tCli.tv_nsec) - (t1->tSv.tv_sec * 1000000000 + t1->tSv.tv_nsec));
       suma+=(t2-t1->t1)/2;
-      printf("DifReloj con el servifor %i =%li nanosegundos\n",j+1,suma/10000);
     }
+    printf("DifReloj con el servidor %i =%li nanosegundos\n",j+1,suma/10000);
   }
   printf("DifReloj=%li nanosegundos\n",suma/10000);
 }
