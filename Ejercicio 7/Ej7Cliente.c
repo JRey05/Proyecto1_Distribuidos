@@ -49,5 +49,4 @@ int main(int argc,char *argv[]) {
     }
     printf("DifReloj con el servidor %i =%li nanosegundos\n",j+1,suma/10000);
   }
-  printf("DifReloj=%li nanosegundos\n",suma/10000);
 }
