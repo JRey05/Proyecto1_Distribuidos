@@ -13,7 +13,7 @@
     5. Se calcula las diferenceias de los relojes como (t1-t2)/2,
      si reemplazamos [dif de relojes + tiempo de envio - (-dif de relojes + envio)]/2 = diferencia de relojes
     6. Se itera 10000 veces y se calcula el promedio para conseguir una medicion mas exacta.
-    */
+*/
 
 int main(int argc,char *argv[]) {
   CLIENT *clnt;
@@ -23,26 +23,31 @@ int main(int argc,char *argv[]) {
   clockid_t clk_id=CLOCK_REALTIME;
   struct respuesta *t1;
   long int t2,suma=0;
-  if (argc != 2) {
+  if (argc < 2) {
     printf ("Error cantidad de parametros.\n");
     exit(1);
   }
-  server = argv[1];
-  clnt = clnt_create(server,SYNCCLOCK, VER1, "TCP");
-  if(clnt == (CLIENT *) NULL) {
-    printf("No hubo conexión\n");
-    exit(1);
-  }
-  sincronizar_1((&tCliente),clnt);    //Descarta los tiempos de la primer medicion, son poco confiables.
-  int i;
-  for(i=0;i<10000;i++){
-    clock_gettime(clk_id, (&tCli));
-    tCliente.tv_sec = (long) tCli.tv_sec;
-    tCliente.tv_nsec = tCli.tv_nsec;
-    t1 = sincronizar_1((&tCliente),clnt);
-    clock_gettime(clk_id, (&tCli));
-    t2 = (long) ((tCli.tv_sec * 1000000000 + tCli.tv_nsec) - (t1->tSv.tv_sec * 1000000000 + t1->tSv.tv_nsec));
-    suma+=(t2-t1->t1)/2;
+  int j;
+  for (j=0; j<argc-1; j++)
+  {
+    server = argv[1+j];
+    clnt = clnt_create(server,SYNCCLOCK, VER1, "TCP");
+    if(clnt == (CLIENT *) NULL) {
+      printf("No hubo conexión\n");
+      exit(1);
+    }
+    sincronizar_1((&tCliente),clnt);    //Descarta los tiempos de la primer medicion, son poco confiables.
+    int i;
+    for(i=0;i<10000;i++){
+      clock_gettime(clk_id, (&tCli));
+      tCliente.tv_sec = (long) tCli.tv_sec;
+      tCliente.tv_nsec = tCli.tv_nsec;
+      t1 = sincronizar_1((&tCliente),clnt);
+      clock_gettime(clk_id, (&tCli));
+      t2 = (long) ((tCli.tv_sec * 1000000000 + tCli.tv_nsec) - (t1->tSv.tv_sec * 1000000000 + t1->tSv.tv_nsec));
+      suma+=(t2-t1->t1)/2;
+      printf("DifReloj con el servifor %i =%li nanosegundos\n",j+1,suma/10000);
+    }
   }
   printf("DifReloj=%li nanosegundos\n",suma/10000);
 }
